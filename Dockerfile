@@ -1,11 +1,12 @@
 FROM golang:latest
 
+RUN mkdir /test
+COPY main.go /test
+
+RUN chgrp -R 0 /test && \
+    chmod -R g=u /test
+
 USER 1001
-
-RUN mkdir test
-COPY main.go test/
-
 EXPOSE 8080
 
-#CMD ["sh", "-c", "GOCACHE=off", "go", "run", "/go/test/main.go"]
-CMD export GOCACHE=/go/test;go run /go/test/main.go
+CMD export GOCACHE=/test/;go run /test/main.go
