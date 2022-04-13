@@ -14,12 +14,8 @@ RUN apt-get install -y vim less
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools
 
-RUN python -m pip install jupyterlab
-
 # COPY ./opt/sample.py /opt/ 
 COPY ./test1.py /opt/
-
-CMD jupyter-lab --ip 0.0.0.0 --allow-root -b localhost
 
 USER 1001
 EXPOSE 7777
