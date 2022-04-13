@@ -1,12 +1,25 @@
-FROM golang:latest
+FROM python:3
+USER root
 
-RUN mkdir /test
-COPY main.go /test
+RUN apt-get update
+RUN apt-get -y install locales && \
+    localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8
+ENV LANGUAGE ja_JP:ja
+ENV LC_ALL ja_JP.UTF-8
+ENV TZ JST-9
+ENV TERM xterm
 
-RUN chgrp -R 0 /test && \
-    chmod -R g=u /test
+RUN apt-get install -y vim less
+RUN pip install --upgrade pip
+RUN pip install --upgrade setuptools
+
+RUN python -m pip install jupyterlab
+
+# COPY ./opt/sample.py /opt/ 
+COPY ./test1.py /opt/
+
+CMD jupyter-lab --ip 0.0.0.0 --allow-root -b localhost
 
 USER 1001
-EXPOSE 8080
-
-CMD export GOCACHE=/test/;go run /test/main.go
+EXPOSE 7777
